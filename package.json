@@ -1,0 +1,15 @@
+{
+  "name": "obsidian-folder-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --platform=node --format=cjs --target=es2020 --external:obsidian --outfile=main.js",
+    "test": "node --experimental-strip-types --test src/server.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.28.1",
+    "obsidian": "latest",
+    "typescript": "^5.5.4"
+  }
+}

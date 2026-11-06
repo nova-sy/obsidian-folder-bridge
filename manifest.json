@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-folder-bridge",
+  "name": "Folder Bridge for Web Clipper",
+  "version": "0.1.0",
+  "minAppVersion": "1.8.0",
+  "description": "Expose folder paths to a local Web Clipper fork.",
+  "author": "nova-sy",
+  "isDesktopOnly": true
+}
