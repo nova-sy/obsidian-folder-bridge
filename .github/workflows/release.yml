@@ -1,0 +1,32 @@
+name: Release Obsidian plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Package and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p 'require("./manifest.json").version')
+          test "$GITHUB_REF_NAME" = "v${version}"
+          zip -j "obsidian-folder-bridge-${version}.zip" main.js manifest.json
+          gh release create "$GITHUB_REF_NAME" "obsidian-folder-bridge-${version}.zip" main.js manifest.json \
+            --verify-tag --title "Folder Bridge ${GITHUB_REF_NAME}" \
+            --notes 'Download the ZIP and extract main.js and manifest.json into <vault>/.obsidian/plugins/obsidian-folder-bridge/. Reload Obsidian and enable the plugin under Community plugins.'
