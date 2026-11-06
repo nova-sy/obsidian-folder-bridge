@@ -21,4 +21,6 @@ test('serves only authenticated extension requests and keeps nested paths', asyn
   const accepted = await fetch(url, { headers: { Origin: origin, 'X-Folder-Bridge-Token': 'secret' } });
   assert.equal(accepted.status, 200);
   assert.deepEqual(await accepted.json(), { vault: 'Notes', folders: ['工具', '工具/开发'] });
+  const noOrigin = await fetch(url, { headers: { 'X-Folder-Bridge-Token': 'secret' } });
+  assert.equal(noOrigin.status, 200);
 });

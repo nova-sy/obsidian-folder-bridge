@@ -5,15 +5,19 @@ export const PORT = 27124;
 export function createFolderServer(vault: string, folders: () => string[], token: string): Server {
   return createServer((request, response) => {
     const origin = request.headers.origin;
-    if (!origin || !/^chrome-extension:\/\/[a-p]{32}$/.test(origin)) {
+    if (origin && !/^chrome-extension:\/\/[a-p]{32}$/.test(origin)) {
       response.writeHead(403).end();
       return;
     }
 
-    response.setHeader('Access-Control-Allow-Origin', origin);
+    if (origin) response.setHeader('Access-Control-Allow-Origin', origin);
     response.setHeader('Vary', 'Origin');
     response.setHeader('Cache-Control', 'no-store');
     if (request.method === 'OPTIONS') {
+      if (!origin) {
+        response.writeHead(403).end();
+        return;
+      }
       response.setHeader('Access-Control-Allow-Methods', 'GET');
       response.setHeader('Access-Control-Allow-Headers', 'X-Folder-Bridge-Token');
       response.writeHead(204).end();
